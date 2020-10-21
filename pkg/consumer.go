@@ -8,4 +8,5 @@ import (
 type Consumer interface {
 	// Read read into the stream
 	Read(ctx context.Context, chMsg chan Message, chErr chan error)
+	Close(chErr chan error)
 }

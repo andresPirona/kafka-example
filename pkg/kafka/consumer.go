@@ -52,3 +52,10 @@ func (c *consumer) Read(ctx context.Context, chMsg chan kafkaexample.Message, ch
 		chMsg <- message
 	}
 }
+
+func (c *consumer) Close(chErr chan error) {
+	errClose := c.reader.Close()
+	if errClose != nil {
+		chErr <- errClose
+	}
+}

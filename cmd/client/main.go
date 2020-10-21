@@ -65,6 +65,10 @@ func main() {
 	for {
 		select {
 		case <-quit:
+			msg := "leaveTheRoom"
+			if err := leaveTheRoom(host, msg); err != nil {
+				log.Fatal(err)
+			}
 			goto end
 		case m := <-chMsg:
 			printMessage(m)
@@ -74,6 +78,7 @@ func main() {
 	}
 end:
 
+	consumer.Close(chErr)
 	fmt.Println("\nyou have abandoned the room")
 
 }
@@ -99,6 +104,12 @@ func joinTheRoom(host string) error {
 func publishMessage(host, message string) error {
 	d := Data{Username: user, Message: message}
 	endpoint := fmt.Sprintf("%s/publish", host)
+	return do(endpoint, d)
+}
+
+func leaveTheRoom(host, message string) error {
+	d := Data{Username: user, Message: message}
+	endpoint := fmt.Sprintf("%s/leaveTheRoom", host)
 	return do(endpoint, d)
 }
 
